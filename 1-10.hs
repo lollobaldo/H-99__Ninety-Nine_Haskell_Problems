@@ -2,69 +2,67 @@ import Test.QuickCheck
 import Data.List
 
 --------------------------------------------------
--- *1: Find the last element of a list.
-f1 = myLast
+-- *01: Find the last element of a list.
+f01 = myLast
 
 myLast :: [a] -> a
 myLast = last
 
-prop_f1 = f1 [1,2,3,4]     == 4
-       && f1 ['x','y','z'] == 'z'
+prop_f01 = f01 [1,2,3,4]     == 4
+        && f01 ['x','y','z'] == 'z'
 
 --------------------------------------------------
--- *2: Find the last but one element of a list.
-f2 = myButLast
+-- *02: Find the last but one element of a list.
+f02 = myButLast
 
 myButLast :: [a] -> a
 myButLast = last . init
 
-prop_f2 = f2 [1,2,3,4]  == 3
-       && f2 ['a'..'z'] == 'y'
+prop_f02 = f02 [1,2,3,4]  == 3
+        && f02 ['a'..'z'] == 'y'
 
 --------------------------------------------------
--- *3: Find the K'th element of a list.
---    The first element in the list is number 1
-f3 = elementAt
+-- *03: Find the K'th element of a list. The first element has index 1
+f03 = elementAt
 
 elementAt :: [a] -> Int -> a
 elementAt = (!!)
 
-prop_f3 = f3 [1,2,3]   2 == 2
-       && f3 "haskell" 5 == 'e'
+prop_f03 = f03 [1,2,3]   2 == 2
+        && f03 "haskell" 5 == 'e'
 
 --------------------------------------------------
 -- *4: Find the number of elements of a list
-f4 = myLength
+f04 = myLength
 
 myLength :: [a] -> Int
 myLength = length
 
-prop_f4 = f4 [123,456,789]   == 3
-       && f4 "Hello, world!" == 13
+prop_f04 = f04 [123,456,789]   == 3
+        && f04 "Hello, world!" == 13
 
 --------------------------------------------------
--- *5: Reverse a list.
-f5 = myReverse
+-- *05: Reverse a list.
+f05 = myReverse
 
 myReverse :: [a] -> [a]
 myReverse = reverse
 
-prop_f5 = f5 "A man, a plan, a canal, panama!" == 
-                "!amanap ,lanac a ,nalp a ,nam A"
-       && f5 [1,2,3,4] == [4,3,2,1]
+prop_f05 = f05 "A man, a plan, a canal, panama!" == 
+                  "!amanap ,lanac a ,nalp a ,nam A"
+        && f05 [1,2,3,4] == [4,3,2,1]
 
 --------------------------------------------------
--- *6: Find out whether a list is a palindrome.
---    A palindrome can be read forward or backward;
---    e.g. (x a m a x)
-f6 ls = isPalindrome ls
+-- *06: Find out whether a list is a palindrome. A palindrome can be read
+-- *     forward or backward; e.g. (x a m a x).
+f06 ls = isPalindrome ls
 
 isPalindrome :: Eq a => [a] -> Bool
 isPalindrome ls = ls == reverse ls
 
-prop_f6 = f6 [1,2,3]              == False
-       && f6 "madamimadam"        == True
-       && f6 [1,2,4,8,16,8,4,2,1] == True
+prop_f06 = f06 [1,2,3]              == False
+        && f06 "madamimadam"        == True
+        && f06 [1,2,4,8,16,8,4,2,1] == True
 
 --------------------------------------------------
 -- **7: Flatten a nested list structure.
@@ -83,10 +81,9 @@ flatten (List ls) = concatMap flatten ls
 --        && f7 (List []) == []
 
 --------------------------------------------------
--- **8: Eliminate consecutive duplicates of list elements.
--- **    If a list contains repeated elements they should be
--- **    replaced with a single copy of the element. The order
--- **    of the elements should not be changed
+-- **8: Eliminate consecutive duplicates of list elements. If a list contains
+-- **   repeated elements they should be replaced with a single copy of the
+-- **   element. The order of the elements should not be changed.
 f8 = compress
 
 compress :: Eq a => [a] -> [a]
@@ -98,9 +95,8 @@ compress xs = xs
 prop_f8 = f8 "aaaabccaadeeee" == "abcade"
 
 --------------------------------------------------
--- **9: Pack consecutive duplicates of list elements into
--- **    sublists. If a list contains repeated elements they
--- **    should be placed in separate sublists
+-- **9: Pack consecutive duplicates of list elements into sublists. If a list
+-- **   contains repeated elements they should be placed in separate sublists.
 f9 = pack
 
 --imported Data.List
@@ -113,15 +109,14 @@ prop_f9 = f9 ['a', 'a', 'a', 'a', 'b', 'c', 'c', 'a',
               ["aaaa","b","cc","aa","d","eeee"]
 
 --------------------------------------------------
--- **10: Run-length encoding of a list. Use the result of
--- **     problem P09 to implement the so-colled run length
--- **     encoding data compression method. Consecutive
--- **     duplicates of elements are encoded as lists (N E)
--- **     where N is the number of duplicates of the element E
+-- **10: Run-length encoding of a list. Use the result of problem P09 to
+-- **    implement the so-colled run length encoding data compression method.
+-- **    Consecutive duplicates of elements are encoded as lists (N E)
+-- **    where N is the number of duplicates of the element E
 f10 ls = encode ls
 
 encode :: Eq a => [a] -> [(Int,a)]
-encode = undefined
+encode = map (\x -> (length x , head x)) . group
 
 prop_f10 = f10 "aaaabccaadeeee" ==
-            [(4,'a'),(1,'b'),(2,'c'),(2,'a'),(1,'d'),(4,'e')]
+                  [(4,'a'),(1,'b'),(2,'c'),(2,'a'),(1,'d'),(4,'e')]
