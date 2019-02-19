@@ -16,9 +16,9 @@ encodeModified = map (
           then Single (head x)
           else Multiple (length x) (head x) ) . group
 
-prop_f11 = f11 "aaaabccaadeeee" ==
-                [Multiple 4 'a',Single 'b',Multiple 2 'c',
-                  Multiple 2 'a',Single 'd',Multiple 4 'e']
+prop_f11 = f11 "aaaabccaadeeee"
+    == [Multiple 4 'a',Single 'b',Multiple 2 'c',
+        Multiple 2 'a',Single 'd',Multiple 4 'e']
 
 
 --------------------------------------------------
@@ -34,29 +34,32 @@ decodeModified = concat . map decodeOne
     decodeOne (Multiple n x) = replicate n x
 
 prop_f12 = f12 [Multiple 4 'a',Single 'b',Multiple 2 'c',
-                  Multiple 2 'a',Single 'd',Multiple 4 'e'] ==
-                    "aaaabccaadeeee"
+       Multiple 2 'a',Single 'd',Multiple 4 'e']
+    == "aaaabccaadeeee"
 prop_f12'  x = (f12 . f11) x == x
 
 --------------------------------------------------
--- *03: Find the K'th element of a list. The first element has index 1
-f03 = elementAt
+-- **13: Implement the so-called run-length encoding data compression method
+-- **    directly. I.e. don't explicitly create the sublists containing the
+-- **    duplicates, as in problem 9, but only count them. As in problem P11,
+-- **    simplify the result list by replacing the singleton lists (1 X) by X.
+f13 = undefined
+-- FIXME: not really sure what I'm meant to do(?)
+encodeDirect :: Eq a => [a] -> [ListItem a]
+encodeDirect = undefined
 
-elementAt :: [a] -> Int -> a
-elementAt = (!!)
-
-prop_f03 = f03 [1,2,3]   2 == 2
-        && f03 "haskell" 5 == 'e'
+-- prop_f13 = f13 [Multiple 4 'a',Single 'b',Multiple 2 'c',
+--        Multiple 2 'a',Single 'd',Multiple 4 'e']
+--     == "aaaabccaadeeee"
 
 --------------------------------------------------
--- *4: Find the number of elements of a list
-f04 = myLength
+-- *14: Duplicate the elements of a list
+f14 = dupli
 
-myLength :: [a] -> Int
-myLength = length
+dupli :: [a] -> [a]
+dupli = concat . map (replicate 2)
 
-prop_f04 = f04 [123,456,789]   == 3
-        && f04 "Hello, world!" == 13
+prop_f14 = f14 [1,2,3]   == [1,1,2,2,3,3]
 
 --------------------------------------------------
 -- *05: Reverse a list.
