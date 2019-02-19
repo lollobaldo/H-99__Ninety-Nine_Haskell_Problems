@@ -56,9 +56,9 @@ prop_f5 = f5 "A man, a plan, a canal, panama!" ==
 -- *6: Find out whether a list is a palindrome.
 --    A palindrome can be read forward or backward;
 --    e.g. (x a m a x)
-f6 = isPalindrome
+f6 ls = isPalindrome ls
 
-isPalindrome :: [a] -> Bool
+isPalindrome :: Eq a => [a] -> Bool
 isPalindrome ls = ls == reverse ls
 
 prop_f6 = f6 [1,2,3]              == False
@@ -66,13 +66,17 @@ prop_f6 = f6 [1,2,3]              == False
        && f6 [1,2,4,8,16,8,4,2,1] == True
 
 --------------------------------------------------
--- *7: Flatten a nested list structure.
-f7 = 
+-- **7: Flatten a nested list structure.
+f7 = flatten
 
-myReverse :: [a] -> [a]
-myReverse = reverse
+data NestedList a = Elem a | List [NestedList a] deriving (Eq, Show)
 
-prop_f5 = f5 "A man, a plan, a canal, panama!" == 
-                "!amanap ,lanac a ,nalp a ,nam A"
-       && f5 [1,2,3,4] == [4,3,2,1]
+flatten :: NestedList a -> [a]
+flatten (Elem a) = [a]
+flatten (List ls) = concatMap flatten ls
+
+-- prop_f7 = f7 (Elem 5) == [5]
+--        && f7 (List [Elem 1, List [Elem 2, List [Elem 3, Elem 4], Elem 5]])
+--                 == [1,2,3,4,5]
+--        && f7 (List []) == []
 
