@@ -2,24 +2,41 @@ import Test.QuickCheck
 import Data.List
 
 --------------------------------------------------
--- *01: Find the last element of a list.
-f01 = myLast
+-- *11: Modify the result of P10 in such a way that if an element has no
+-- *    duplicates it is simply copies into the result list. Only elements with
+-- *    duplicates are transferred as (N E) lists.
+f11 = encodeModified
 
-myLast :: [a] -> a
-myLast = last
+data ListItem a = Single a | Multiple Int a deriving (Eq, Show)
 
-prop_f01 = f01 [1,2,3,4]     == 4
-        && f01 ['x','y','z'] == 'z'
+encodeModified :: Eq a => [a] -> [ListItem a]
+encodeModified = map (
+    \x ->
+        if length x == 1
+          then Single (head x)
+          else Multiple (length x) (head x) ) . group
+
+prop_f11 = f11 "aaaabccaadeeee" ==
+                [Multiple 4 'a',Single 'b',Multiple 2 'c',
+                  Multiple 2 'a',Single 'd',Multiple 4 'e']
+
 
 --------------------------------------------------
--- *02: Find the last but one element of a list.
-f02 = myButLast
+-- **02: Given a run-length code list generated as specified in problem 11.
+-- **    Construct its uncompressed version.
+f12 = decodeModified
 
-myButLast :: [a] -> a
-myButLast = last . init
+decodeModified :: [ListItem a] -> [a]
+decodeModified = concat . map decodeOne
+  where
+    decodeOne :: ListItem a -> [a]
+    decodeOne (Single x)     = [x]
+    decodeOne (Multiple n x) = replicate n x
 
-prop_f02 = f02 [1,2,3,4]  == 3
-        && f02 ['a'..'z'] == 'y'
+prop_f12 = f12 [Multiple 4 'a',Single 'b',Multiple 2 'c',
+                  Multiple 2 'a',Single 'd',Multiple 4 'e'] ==
+                    "aaaabccaadeeee"
+prop_f12'  x = (f12 . f11) x == x
 
 --------------------------------------------------
 -- *03: Find the K'th element of a list. The first element has index 1
