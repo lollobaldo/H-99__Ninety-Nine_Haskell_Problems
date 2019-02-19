@@ -48,8 +48,8 @@ f05 = myReverse
 myReverse :: [a] -> [a]
 myReverse = reverse
 
-prop_f05 = f05 "A man, a plan, a canal, panama!" == 
-                  "!amanap ,lanac a ,nalp a ,nam A"
+prop_f05 = f05 "A man, a plan, a canal, panama!"
+            == "!amanap ,lanac a ,nalp a ,nam A"
         && f05 [1,2,3,4] == [4,3,2,1]
 
 --------------------------------------------------
@@ -105,8 +105,8 @@ pack :: Eq a => [a] -> [[a]]
 pack = group
 
 prop_f9 = f9 ['a', 'a', 'a', 'a', 'b', 'c', 'c', 'a',
-              'a', 'd', 'e', 'e', 'e', 'e'] ==
-              ["aaaa","b","cc","aa","d","eeee"]
+              'a', 'd', 'e', 'e', 'e', 'e']
+          == ["aaaa","b","cc","aa","d","eeee"]
 
 --------------------------------------------------
 -- **10: Run-length encoding of a list. Use the result of problem P09 to
@@ -118,5 +118,5 @@ f10 ls = encode ls
 encode :: Eq a => [a] -> [(Int,a)]
 encode = map (\x -> (length x , head x)) . group
 
-prop_f10 = f10 "aaaabccaadeeee" ==
-                  [(4,'a'),(1,'b'),(2,'c'),(2,'a'),(1,'d'),(4,'e')]
+prop_f10 = f10 "aaaabccaadeeee"
+            == [(4,'a'),(1,'b'),(2,'c'),(2,'a'),(1,'d'),(4,'e')]
