@@ -4,5 +4,26 @@
 			"path": "."
 		}
 	],
-	"settings": {}
+	"settings": {
+		"better-comments.tags": [
+			{
+			"tag": "***",
+			"color": "#FF3333",
+			"strikethrough": false,
+			"backgroundColor": "transparent"
+			},
+			{
+			"tag": "**",
+			"color": "#FFBB00",
+			"strikethrough": false,
+			"backgroundColor": "transparent"
+			},
+			{
+			"tag": "*",
+			"color": "#00AA00",
+			"strikethrough": true,
+			"backgroundColor": "transparent"
+			},
+		]
+	}
 }
