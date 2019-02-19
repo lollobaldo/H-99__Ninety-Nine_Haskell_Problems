@@ -21,7 +21,7 @@
 			{
 			"tag": "*",
 			"color": "#00AA00",
-			"strikethrough": true,
+			"strikethrough": false,
 			"backgroundColor": "transparent"
 			},
 		]
