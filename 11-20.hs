@@ -62,27 +62,22 @@ dupli = concat . map (replicate 2)
 prop_f14 = f14 [1,2,3]   == [1,1,2,2,3,3]
 
 --------------------------------------------------
--- *05: Reverse a list.
-f05 = myReverse
+-- **15: Replicate the elements of a list a given number of times.
+f15 = repli
 
-myReverse :: [a] -> [a]
-myReverse = reverse
+repli :: [a] -> Int -> [a]
+repli ls n = concat . map (replicate n) $ ls
 
-prop_f05 = f05 "A man, a plan, a canal, panama!" == 
-                  "!amanap ,lanac a ,nalp a ,nam A"
-        && f05 [1,2,3,4] == [4,3,2,1]
+prop_f15 = f15 "abc" 3 == "aaabbbccc"
 
 --------------------------------------------------
--- *06: Find out whether a list is a palindrome. A palindrome can be read
--- *     forward or backward; e.g. (x a m a x).
-f06 ls = isPalindrome ls
+-- **16: Drop every N'th element from a list.
+f16 = dropEvery
 
-isPalindrome :: Eq a => [a] -> Bool
-isPalindrome ls = ls == reverse ls
+dropEvery :: [a] -> Int -> [a]
+dropEvery ls n = [l | (l,i) <- zip ls [1..], i `mod` n /= 0]
 
-prop_f06 = f06 [1,2,3]              == False
-        && f06 "madamimadam"        == True
-        && f06 [1,2,4,8,16,8,4,2,1] == True
+prop_f16 = f16 "abcdefghik" 3 == "abdeghk"
 
 --------------------------------------------------
 -- **7: Flatten a nested list structure.
