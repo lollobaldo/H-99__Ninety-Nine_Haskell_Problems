@@ -104,20 +104,22 @@ prop_f18 = f18 "abcdefghik" 3 7 == "cdefg"
 f19 = rotate
 
 rotate :: [a] -> Int -> [a]
-rotate = group
+rotate ls  0 = ls
+rotate ls n = take l . drop (n `mod `l) . cycle $ ls
+  where
+    l = length ls
 
-prop_f19 = f19 ['a', 'b', 'c', 'd', 'e', 'f', 'g', h'] 3    == "defghabc"
-        && f19 ['a', 'b', 'c', 'd', 'e', 'f', 'g', h'] (-2) == "ghabcdef"
+prop_f19 = f19 ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'] 3    == "defghabc"
+        && f19 ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'] (-2) == "ghabcdef"
 
 --------------------------------------------------
--- **10: Run-length encoding of a list. Use the result of problem P09 to
--- **    implement the so-colled run length encoding data compression method.
--- **    Consecutive duplicates of elements are encoded as lists (N E)
--- **    where N is the number of duplicates of the element E
-f10 ls = encode ls
+-- **20: Remove the K'th element from a list.
+f20 = remove_at
 
-encode :: Eq a => [a] -> [(Int,a)]
-encode = map (\x -> (length x , head x)) . group
+remove_at :: Int -> [a] -> (a,[a])
+remove_at n ls = (ls !! k , removed)
+  where
+    k = n - 1
+    removed = take k ls ++ (tail . drop 1) ls
 
-prop_f10 = f10 "aaaabccaadeeee" ==
-                  [(4,'a'),(1,'b'),(2,'c'),(2,'a'),(1,'d'),(4,'e')]
+prop_f20 = f20 2 "abcd" == ('b', "acd")
