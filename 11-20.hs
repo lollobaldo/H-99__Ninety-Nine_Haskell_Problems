@@ -80,48 +80,34 @@ dropEvery ls n = [l | (l,i) <- zip ls [1..], i `mod` n /= 0]
 prop_f16 = f16 "abcdefghik" 3 == "abdeghk"
 
 --------------------------------------------------
--- **7: Flatten a nested list structure.
-f7 = flatten
+-- *17: Split a list into two parts; the length of the first part is given.
+f17 = split
 
-data NestedList a = Elem a | List [NestedList a] deriving (Eq, Show)
+split :: [a] -> Int -> ([a],[a])
+split = flip splitAt
 
-flatten :: NestedList a -> [a]
-flatten (Elem a) = [a]
-flatten (List ls) = concatMap flatten ls
--- TODO: Not sure, but the prop gives some type error on Eq
---       being undefined. Manually checked them anyways.
--- prop_f7 = f7 (Elem 5) == [5]
---        && f7 (List [Elem 1, List [Elem 2, List [Elem 3, Elem 4], Elem 5]])
---                 == [1,2,3,4,5]
---        && f7 (List []) == []
+prop_f17 = f17 "abcdefghik" 3 == ("abc","defghik")
 
 --------------------------------------------------
--- **8: Eliminate consecutive duplicates of list elements. If a list contains
--- **   repeated elements they should be replaced with a single copy of the
--- **   element. The order of the elements should not be changed.
-f8 = compress
+-- **18: Given two indeces, i and k, the slice is the list containing the
+-- **    elements between the i'th and k'th element of the original list (both
+-- **    limist included). Start counting the element with 1.
+f18 = slice
 
-compress :: Eq a => [a] -> [a]
-compress (x:y:zs)
-    | x == y = compress (x:zs)
-    | otherwise = x : compress (y:zs)
-compress xs = xs
+slice :: [a] -> Int -> Int -> [a]
+slice ls a b = drop (a-1) $ take b ls
 
-prop_f8 = f8 "aaaabccaadeeee" == "abcade"
+prop_f18 = f18 "abcdefghik" 3 7 == "cdefg"
 
 --------------------------------------------------
--- **9: Pack consecutive duplicates of list elements into sublists. If a list
--- **   contains repeated elements they should be placed in separate sublists.
-f9 = pack
+-- **19: Rotate a list N placed to the left.
+f19 = rotate
 
---imported Data.List
+rotate :: [a] -> Int -> [a]
+rotate = group
 
-pack :: Eq a => [a] -> [[a]]
-pack = group
-
-prop_f9 = f9 ['a', 'a', 'a', 'a', 'b', 'c', 'c', 'a',
-              'a', 'd', 'e', 'e', 'e', 'e'] ==
-              ["aaaa","b","cc","aa","d","eeee"]
+prop_f19 = f19 ['a', 'b', 'c', 'd', 'e', 'f', 'g', h'] 3    == "defghabc"
+        && f19 ['a', 'b', 'c', 'd', 'e', 'f', 'g', h'] (-2) == "ghabcdef"
 
 --------------------------------------------------
 -- **10: Run-length encoding of a list. Use the result of problem P09 to
