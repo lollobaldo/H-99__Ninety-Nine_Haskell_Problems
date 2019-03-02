@@ -1,3 +1,5 @@
+import Data.List
+
 x :: [Int] -> [Int]
 x = foldr (\x y -> y ++ [2*x]) []
 
@@ -21,5 +23,9 @@ instance Functor ShoppingList where
   fmap f (Listofitems ls) = Listofitems $ map (fmap f) ls
 
 
-type Ciao = Char
-data ShoppingList' a = ShoppingList' [a]
+sumAll :: [Int] -> Int
+sumAll ls = foldl' (+) 0 ls
+
+
+sumAny a b = sumAny (a+b)
+sumAny ret = ret

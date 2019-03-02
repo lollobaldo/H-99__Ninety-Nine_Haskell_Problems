@@ -1,0 +1,116 @@
+import Test.QuickCheck
+--import Data.List
+
+--------------------------------------------------
+-- *21: Insert a given element at a given position into a list.
+f21 = insertAt
+
+insertAt :: a -> [a] -> Int -> [a]
+insertAt x ls n = take k ls ++ x : drop k ls
+  where
+    k = n - 1
+
+prop_f21 = f21 'X' "abcd" 2 == "aXbcd"
+
+--------------------------------------------------
+-- **02: Given a run-length code list generated as specified in problem 11.
+-- **    Construct its uncompressed version.
+f12 = decodeModified
+
+decodeModified :: [ListItem a] -> [a]
+decodeModified = concat . map decodeOne
+  where
+    decodeOne :: ListItem a -> [a]
+    decodeOne (Single x)     = [x]
+    decodeOne (Multiple n x) = replicate n x
+
+prop_f12 = f12 [Multiple 4 'a',Single 'b',Multiple 2 'c',
+       Multiple 2 'a',Single 'd',Multiple 4 'e']
+    == "aaaabccaadeeee"
+prop_f12'  x = (f12 . f11) x == x
+
+--------------------------------------------------
+-- **13: Implement the so-called run-length encoding data compression method
+-- **    directly. I.e. don't explicitly create the sublists containing the
+-- **    duplicates, as in problem 9, but only count them. As in problem P11,
+-- **    simplify the result list by replacing the singleton lists (1 X) by X.
+f13 = undefined
+-- FIXME: not really sure what I'm meant to do(?)
+encodeDirect :: Eq a => [a] -> [ListItem a]
+encodeDirect = undefined
+
+-- prop_f13 = f13 [Multiple 4 'a',Single 'b',Multiple 2 'c',
+--        Multiple 2 'a',Single 'd',Multiple 4 'e']
+--     == "aaaabccaadeeee"
+
+--------------------------------------------------
+-- *14: Duplicate the elements of a list
+f14 = dupli
+
+dupli :: [a] -> [a]
+dupli = concat . map (replicate 2)
+
+prop_f14 = f14 [1,2,3]   == [1,1,2,2,3,3]
+
+--------------------------------------------------
+-- **15: Replicate the elements of a list a given number of times.
+f15 = repli
+
+repli :: [a] -> Int -> [a]
+repli ls n = concat . map (replicate n) $ ls
+
+prop_f15 = f15 "abc" 3 == "aaabbbccc"
+
+--------------------------------------------------
+-- **16: Drop every N'th element from a list.
+f16 = dropEvery
+
+dropEvery :: [a] -> Int -> [a]
+dropEvery ls n = [l | (l,i) <- zip ls [1..], i `mod` n /= 0]
+
+prop_f16 = f16 "abcdefghik" 3 == "abdeghk"
+
+--------------------------------------------------
+-- *17: Split a list into two parts; the length of the first part is given.
+f17 = split
+
+split :: [a] -> Int -> ([a],[a])
+split = flip splitAt
+
+prop_f17 = f17 "abcdefghik" 3 == ("abc","defghik")
+
+--------------------------------------------------
+-- **18: Given two indeces, i and k, the slice is the list containing the
+-- **    elements between the i'th and k'th element of the original list (both
+-- **    limist included). Start counting the element with 1.
+f18 = slice
+
+slice :: [a] -> Int -> Int -> [a]
+slice ls a b = drop (a-1) $ take b ls
+
+prop_f18 = f18 "abcdefghik" 3 7 == "cdefg"
+
+--------------------------------------------------
+-- **19: Rotate a list N placed to the left.
+f19 = rotate
+
+rotate :: [a] -> Int -> [a]
+rotate ls  0 = ls
+rotate ls n = take l . drop (n `mod `l) . cycle $ ls
+  where
+    l = length ls
+
+prop_f19 = f19 ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'] 3    == "defghabc"
+        && f19 ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'] (-2) == "ghabcdef"
+
+--------------------------------------------------
+-- **20: Remove the K'th element from a list.
+f20 = remove_at
+
+remove_at :: Int -> [a] -> (a,[a])
+remove_at n ls = (ls !! k , removed)
+  where
+    k = n - 1
+    removed = take k ls ++ (tail . drop 1) ls
+
+prop_f20 = f20 2 "abcd" == ('b', "acd")
